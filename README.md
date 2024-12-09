@@ -28,9 +28,7 @@ Rawg documentation : https://rawg.io/apidocs
 
 ### Clone the repository: 
 
-- ```git clone https://github.com/Compote0/kotlin-app.git```
-- ```cd /kotlin-app```
-- ```code .```
+```git clone https://github.com/Compote0/kotlin-app.git```
 
 ### Install dependencies: Ensure you have the correct SDK version and libraries installed.
 
