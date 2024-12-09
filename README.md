@@ -1,5 +1,7 @@
-## 📱 Kotlin Game Search App
+# 📱 Kotlin Game Search App
 A mobile application built with Kotlin, Jetpack Compose, and the RAWG API that allows users to search for games, explore categories, and see detailed game information.
+
+Rawg documentation : https://rawg.io/apidocs
 
 ## 🚀 Features
 - 🔍 Search Games by name using the RAWG API.
@@ -9,22 +11,33 @@ A mobile application built with Kotlin, Jetpack Compose, and the RAWG API that a
 - 🎨 Material 3 UI Design with Jetpack Compose.
 - 🌙 Dark Mode Support.
 
-## 📸 Screenshots
+## 📸 Screenshots 
+
+| ![image](img/image.png) | ![image1](img/image1.png) |![image4](img/image4.png) | ![image2](img/image2.png) | ![image3](img/image3.png) | 
+|------------------------|----------------------------|----------------------------|----------------------------|----------------------------|
 
 
 ## 🛠️ Technologies Used
-Kotlin - Main programming language
-Jetpack Compose - For building modern UI
-RAWG API - Game search and details provider
-Android SDK - App development platform
-Accompanist SwipeRefresh - For pull-to-refresh functionality
+- Kotlin - Main programming language
+- Jetpack Compose - For building modern UI
+- RAWG API - Game search and details provider
+- Android SDK - App development platform
+- Accompanist SwipeRefresh - For pull-to-refresh functionality
 
 ## 📦 Setup & Installation
-Clone the repository: 
 
-Install dependencies: Ensure you have the correct SDK version and libraries installed.
+### Clone the repository: 
 
-Run the application: Use an emulator or physical device.
+- ```git clone https://github.com/Compote0/kotlin-app.git```
+- ```cd /kotlin-app```
+- ```code .```
+
+### Install dependencies: Ensure you have the correct SDK version and libraries installed.
+
+- Open the project in Android Studio
+- Sync Gradle
+
+### Run the application: Use an emulator or physical device.
 
 ## 🔧 Configuration
 API Key Setup:
@@ -40,7 +53,8 @@ Build & Run:
 
 Ensure you have an internet connection.
 
-📂 Project Structure  
+## 📂 Project Structure  
+
 📂 courskotlin  
  ├── 📂 app  
  │    ├── 📂 src  
@@ -50,9 +64,8 @@ Ensure you have an internet connection.
  │    │    │    │    ├── 📂 http          // API Requests  
  │    │    │    │    ├── 📂 model         // Data Model  
  │    │    │    │    ├── 📂 ui            
- |    │    │    │    │    ├── 📂 screens          // Screens of the app  
- |    │    │    │    │    ├── 📂 theme            // Theme of the app  
- │    │    │    │    ├── 📂 ui            // API Requests  
+ │    │    │    │    │    ├── 📂 screens          // Screens of the app  
+ │    │    │    │    │    ├── 📂 theme            // Theme of the app  
  │    │    │    │    ├── 📂 utils         // Utils  
  │    │    │    │    ├── 📂 viewmodel     // ViewModel Logic  
  │    │    │    │    └── MainActivity.kt  // Main App Entry  
