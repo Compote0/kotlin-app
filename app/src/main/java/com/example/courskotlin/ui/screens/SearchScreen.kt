@@ -20,9 +20,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.courskotlin.ui.theme._2024_10_cdanTheme
+import com.example.courskotlin.ui.theme.app_theme
 import com.example.courskotlin.viewmodel.MainViewModel
 import androidx.compose.ui.text.input.ImeAction
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.courskotlin.ui.navigation.Routes
 
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -31,12 +34,13 @@ import androidx.compose.ui.text.input.ImeAction
 fun SearchScreenPreview() {
     // view model with is preview for fake data
     val mockViewModel = MainViewModel(isPreview = true)
-
-    _2024_10_cdanTheme {
+    val mockNavController = rememberNavController()
+    app_theme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             SearchScreen(
                 modifier = Modifier.padding(innerPadding),
-                mainViewModel = mockViewModel
+                mainViewModel = mockViewModel,
+                navController = mockNavController
             )
         }
     }
@@ -45,7 +49,7 @@ fun SearchScreenPreview() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, mainViewModel: MainViewModel) {
+fun SearchScreen(modifier: Modifier = Modifier, mainViewModel: MainViewModel, navController: NavController) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     val focusManager = LocalFocusManager.current
 
@@ -106,7 +110,13 @@ fun SearchScreen(modifier: Modifier = Modifier, mainViewModel: MainViewModel) {
 
             LazyColumn {
                 items(mainViewModel.dataList.value) { game ->
-                    PictureRowItem(data = game, mainViewModel = mainViewModel)
+                    PictureRowItem(
+                        data = game,
+                        mainViewModel = mainViewModel,
+                        onClick = { id ->
+                            navController.navigate(Routes.DetailScreen.withId(id))
+                        }
+                    )
                 }
             }
         }

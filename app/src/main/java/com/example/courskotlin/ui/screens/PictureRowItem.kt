@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
@@ -26,7 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.courskotlin.R
 import com.example.courskotlin.model.GenreWrapper
-import com.example.courskotlin.ui.theme._2024_10_cdanTheme
+import com.example.courskotlin.ui.theme.app_theme
 import com.example.courskotlin.utils.PlatformIconProvider
 import com.example.courskotlin.viewmodel.MainViewModel
 import java.time.LocalDate
@@ -52,7 +51,7 @@ fun PictureRowItemPreview() {
         )
     )
 
-    _2024_10_cdanTheme {
+    app_theme {
         val mockViewModel = MainViewModel(isPreview = true)
         PictureRowItem(data = mockGame, mainViewModel = mockViewModel)
     }
@@ -62,11 +61,9 @@ fun PictureRowItemPreview() {
 fun PictureRowItem(
     modifier: Modifier = Modifier,
     data: GameBean,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    onClick: (Int) -> Unit = {}
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var detailedGame by remember { mutableStateOf(data) }
-
     val isDarkTheme = isSystemInDarkTheme()
 
     val viewMoreTextColor = if (isDarkTheme) {
@@ -83,7 +80,7 @@ fun PictureRowItem(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
-                isExpanded = !isExpanded
+                onClick(data.id)
             },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
@@ -94,7 +91,7 @@ fun PictureRowItem(
     ) {
         Column {
             Image(
-                painter = rememberImagePainter(data = detailedGame.url),
+                painter = rememberImagePainter(data = data.url),
                 contentDescription = "Game image",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,17 +100,16 @@ fun PictureRowItem(
                 contentScale = ContentScale.Crop
             )
 
-            // Text section
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = detailedGame.title,
+                    text = data.title,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text(
-                    text = "Metacritic: ${detailedGame.metacritic ?: "N/A"}",
+                    text = "Metacritic: ${data.metacritic ?: "N/A"}",
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     modifier = Modifier.fillMaxWidth()
@@ -121,9 +117,8 @@ fun PictureRowItem(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Platforms and release date
                 Row {
-                    val uniquePlatforms = detailedGame.platforms?.mapNotNull { getPlatformIcon(it) }?.toSet()
+                    val uniquePlatforms = data.platforms?.mapNotNull { getPlatformIcon(it) }?.toSet()
                     uniquePlatforms?.forEach { iconResId ->
                         Icon(
                             painter = painterResource(id = iconResId),
@@ -136,14 +131,13 @@ fun PictureRowItem(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Release Date (formatted)
                 Row {
                     Text(
                         text = "Release Date: ",
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
-                    val formattedDate = detailedGame.releaseDate?.let {
+                    val formattedDate = data.releaseDate?.let {
                         LocalDate.parse(it).format(DateTimeFormatter.ofPattern("MMM dd, yyyy"))
                     } ?: "Unknown"
                     Text(
@@ -153,74 +147,16 @@ fun PictureRowItem(
                     )
                 }
 
-                if (isExpanded) {
-                    Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    // Genres
-                    Row {
-                        Text(
-                            text = "Genres: ",
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                        )
-                        Text(
-                            text = detailedGame.genres?.joinToString(", ") { it.name ?: "Unknown" } ?: "N/A",
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            textDecoration = TextDecoration.Underline
-                        )
+                Text(
+                    text = "View more",
+                    fontSize = 14.sp,
+                    color = viewMoreTextColor,
+                    modifier = Modifier.clickable {
+                        onClick(data.id)
                     }
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    // Website
-                    Row {
-                        Text(
-                            text = "Website: ",
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                        )
-                        Text(
-                            text = detailedGame.website ?: "No website available",
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    // Description
-                    Row {
-                        Text(
-                            text = "Description: ",
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                        )
-                        Text(
-                            text = detailedGame.description_raw.takeIf { it.isNotEmpty() } ?: "No description available...",
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "View less",
-                        fontSize = 14.sp,
-                        color = viewMoreTextColor,
-                        modifier = Modifier.clickable { isExpanded = false }
-                    )
-                } else {
-                    Text(
-                        text = "View more",
-                        fontSize = 14.sp,
-                        color = viewMoreTextColor,
-                        modifier = Modifier.clickable {
-                            isExpanded = true
-                        }
-                    )
-                }
+                )
             }
         }
     }

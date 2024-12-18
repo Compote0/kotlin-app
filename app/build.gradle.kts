@@ -44,8 +44,8 @@ dependencies {
     dependencies {
 
         // implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
-        implementation("androidx.compose.material:material:1.5.0")
-        implementation("androidx.navigation:navigation-compose:2.5.3")
+        implementation("androidx.compose.material3:material3:1.2.0")
+        implementation("androidx.navigation:navigation-compose:2.7.5")
         implementation("com.squareup.okhttp3:okhttp:+")
         implementation("com.google.code.gson:gson:+")
         implementation("io.coil-kt:coil-compose:1.3.2")

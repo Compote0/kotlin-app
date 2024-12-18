@@ -10,7 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.courskotlin.ui.screens.MainScreen
 import com.example.courskotlin.ui.screens.SearchScreen
-import com.example.courskotlin.ui.theme._2024_10_cdanTheme
+import com.example.courskotlin.ui.theme.app_theme
+import com.example.courskotlin.ui.theme.app_theme
 import com.example.courskotlin.viewmodel.MainViewModel
 
 
@@ -19,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            _2024_10_cdanTheme {
+            app_theme {
                 MainScreen(mainViewModel = MainViewModel(isPreview = false))
             }
         }

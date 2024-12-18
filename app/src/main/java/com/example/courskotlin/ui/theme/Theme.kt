@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 // color schemes for dark and light modes
 private val DarkColorScheme = darkColorScheme(
@@ -28,8 +29,12 @@ private val LightColorScheme = lightColorScheme(
     onSurface = LightOnSurface
 )
 
+val MaterialTheme.linkColor: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) DarkLink else LightLink
+
 @Composable
-fun _2024_10_cdanTheme(
+fun app_theme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

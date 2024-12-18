@@ -12,7 +12,10 @@ import androidx.navigation.compose.*
 import com.example.courskotlin.R
 import com.example.courskotlin.viewmodel.MainViewModel
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.courskotlin.ui.theme._2024_10_cdanTheme
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.courskotlin.ui.navigation.Routes
+import com.example.courskotlin.ui.theme.app_theme
 
 @Preview(showBackground = true, showSystemUi = true)
 @Preview(showBackground = true, showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
@@ -20,7 +23,7 @@ import com.example.courskotlin.ui.theme._2024_10_cdanTheme
 fun MainScreenPreview() {
     val mockViewModel = MainViewModel(isPreview = true)
 
-    _2024_10_cdanTheme {
+    app_theme {
         MainScreen(mainViewModel = mockViewModel)
     }
 }
@@ -35,17 +38,12 @@ fun MainScreen(mainViewModel: MainViewModel) {
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.height(80.dp)
             ) {
-                val homeInteractionSource = remember { MutableInteractionSource() }
-                val searchInteractionSource = remember { MutableInteractionSource() }
-
                 NavigationBarItem(
-                    selected = currentDestination.value?.destination?.route == "home",
+                    selected = currentDestination.value?.destination?.route == Routes.HomeScreen.route,
                     onClick = {
-                        if (currentDestination.value?.destination?.route != "home") {
-                            navController.navigate("home") {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
-                                }
+                        if (currentDestination.value?.destination?.route != Routes.HomeScreen.route) {
+                            navController.navigate(Routes.HomeScreen.route) {
+                                popUpTo(navController.graph.startDestinationId) { saveState = true }
                                 launchSingleTop = true
                                 restoreState = true
                             }
@@ -54,15 +52,13 @@ fun MainScreen(mainViewModel: MainViewModel) {
                     icon = {
                         Icon(
                             painter = painterResource(
-                                if (currentDestination.value?.destination?.route == "home")
+                                if (currentDestination.value?.destination?.route == Routes.HomeScreen.route)
                                     R.drawable.ic_manette_full
                                 else
                                     R.drawable.ic_manette_light
                             ),
                             contentDescription = "Home",
-                            modifier = Modifier
-                                .size(36.dp)
-                                .padding(top = 8.dp)
+                            modifier = Modifier.size(36.dp).padding(top = 8.dp)
                         )
                     },
                     colors = NavigationBarItemDefaults.colors(
@@ -70,16 +66,15 @@ fun MainScreen(mainViewModel: MainViewModel) {
                         unselectedIconColor = MaterialTheme.colorScheme.onSecondary,
                         indicatorColor = Color.Transparent
                     ),
-                    interactionSource = homeInteractionSource,
                     alwaysShowLabel = false,
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
 
                 NavigationBarItem(
-                    selected = currentDestination.value?.destination?.route == "search",
+                    selected = currentDestination.value?.destination?.route == Routes.SearchScreen.route,
                     onClick = {
-                        if (currentDestination.value?.destination?.route != "search") {
-                            navController.navigate("search") {
+                        if (currentDestination.value?.destination?.route != Routes.SearchScreen.route) {
+                            navController.navigate(Routes.SearchScreen.route) {
                                 popUpTo(navController.graph.startDestinationId) {
                                     saveState = true
                                 }
@@ -91,7 +86,7 @@ fun MainScreen(mainViewModel: MainViewModel) {
                     icon = {
                         Icon(
                             painter = painterResource(
-                                if (currentDestination.value?.destination?.route == "search")
+                                if (currentDestination.value?.destination?.route == Routes.SearchScreen.route)
                                     R.drawable.ic_rechercher_bold
                                 else
                                     R.drawable.ic_rechercher_light
@@ -107,16 +102,33 @@ fun MainScreen(mainViewModel: MainViewModel) {
                         unselectedIconColor = MaterialTheme.colorScheme.onSecondary,
                         indicatorColor = Color.Transparent
                     ),
-                    interactionSource = searchInteractionSource,
                     alwaysShowLabel = false,
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
             }
         }
     ) { innerPadding ->
-        NavHost(navController = navController, startDestination = "home") {
-            composable("home") { HomeScreen(mainViewModel = mainViewModel) }
-            composable("search") { SearchScreen(mainViewModel = mainViewModel) }
+        NavHost(navController = navController, startDestination = Routes.HomeScreen.route) {
+            composable(Routes.HomeScreen.route) {
+                HomeScreen(mainViewModel = mainViewModel, navController = navController)
+            }
+            composable(Routes.SearchScreen.route) {
+                SearchScreen(mainViewModel = mainViewModel, navController = navController)
+            }
+            composable(
+                route = Routes.DetailScreen.route,
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getInt("id") ?: 0
+                val game = mainViewModel.homeGamesList.value.find { it.id == id }
+                game?.let {
+                    DetailScreen(
+                        pictureBean = it,
+                        navController = navController,
+                        mainViewModel = mainViewModel
+                    )
+                }
+            }
         }
     }
 }

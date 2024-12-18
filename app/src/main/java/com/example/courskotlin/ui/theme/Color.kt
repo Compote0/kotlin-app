@@ -11,6 +11,7 @@ val DarkBackground = Color.Black
 val DarkSurface = Color(0xFF121212)
 val DarkOnBackground = Color.White
 val DarkOnSurface = Color.LightGray
+val DarkLink = Color(0xFF64B5F6)
 
 // Light theme colors
 val LightPrimary = Color.White
@@ -21,7 +22,7 @@ val LightBackground = Color(0xFFFAFAFA)
 val LightSurface = Color.White
 val LightOnBackground = Color.Black
 val LightOnSurface = Color.DarkGray
-
+val LightLink = Color(0xFF1976D2)
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
